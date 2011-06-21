@@ -45,5 +45,21 @@ class AbiquoMonolithicTest < Test::Unit::TestCase
     def test_firewall
       assert !::TestUtils.service_on?('iptables')
     end
+    
+    def test_am
+      assert ::TestUtils.web_service_ok?('/am/check')
+    end
+    def test_vsm
+      assert ::TestUtils.web_service_ok?('/vsm/check')
+    end
+    def test_nodecollector
+      assert ::TestUtils.web_service_ok?('/nodecollector/check')
+    end
+    def test_ssm
+      assert ::TestUtils.web_service_ok?('/ssm/check')
+    end
+    def test_virtualfactory
+      assert ::TestUtils.web_service_ok?('/virtualfactory/check')
+    end
 
 end
