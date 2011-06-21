@@ -1,0 +1,89 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'net/ssh'
+require 'net/sftp'
+require 'term/ansicolor'
+require 'mixlib/cli'
+
+class String
+  include Term::ANSIColor
+end
+
+class MyCLI
+  include Mixlib::CLI
+
+  option :user,
+    :short => '-u USER',
+    :long => "--user USEr",
+    :description => "SSH user to login with (Default root)",
+    :default => 'root'
+
+  option :password,
+    :short => '-p PASS',
+    :long => "--password PASS",
+    :description => "SSH password to login with"
+  
+  option :host,
+    :long => "--host HOST",
+    :description => "Abiquo host IP to test"
+  
+  option :help,
+    :short => "-h",
+    :long => "--help",
+    :description => "Show this message",
+    :on => :tail,
+    :boolean => true,
+    :show_options => true,
+    :exit => 0
+
+end
+
+def required_option(cli, opt)
+  if cli.config[opt].nil?
+    $stderr.puts "\n#{opt.to_s} argument requied.\n\n"
+    $stderr.puts cli.opt_parser.help
+    exit 1
+  end
+  return cli.config[opt]
+end
+
+Log = Logger.new($stdout)
+
+cli = MyCLI.new
+cli.parse_options
+
+required_option cli, :password
+required_option cli, :host
+
+TESTS_DIR = File.dirname(__FILE__) + '/../tests/'
+
+begin
+  Net::SSH.start(cli.config[:host], 'root', :paranoid => false, :password => cli.config[:password]) do |ssh|
+    ssh.exec!("rm -rf /tmp/tests")
+  end
+rescue Exception => e
+  $stderr.puts "Error cleaning previous tests in host #{cli.config[:host]}: #{e.message}"
+  exit 1
+end
+
+begin
+  Net::SFTP.start(cli.config[:host], 'root', :password => cli.config[:password], :paranoid => false) do |sftp|
+    sftp.upload! TESTS_DIR, '/tmp/tests/'
+  end
+rescue Exception => e
+  $stderr.puts "Error uploading tests to host #{cli.config[:host]}: #{e.message}"
+  exit 1
+end
+
+begin
+  Net::SSH.start(cli.config[:host], 'root', :password => cli.config[:password], :paranoid => false) do |ssh|
+    output = ssh.exec!("cd /tmp/tests/ && ruby abiquo_postinst_test.rb")
+    if output =~ /Failure/m
+      puts "\n>>>>>> TEST FAILED! <<<<<<".bold.red
+    end
+    puts output
+  end
+rescue Exception => e
+  $stderr.puts "Error running tests in remote host #{cli.config[:host]}: #{e.message}"
+  exit 1
+end
