@@ -27,4 +27,8 @@ class AbiquoV2VTest < Test::Unit::TestCase
       assert File.exist?('/usr/bin/v2v-diskmanager')
     end
 
+    def test_abiquo_dir
+      assert File.directory? '/opt/abiquo'
+    end
+
 end

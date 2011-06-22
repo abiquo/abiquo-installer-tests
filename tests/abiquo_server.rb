@@ -31,5 +31,9 @@ class AbiquoServerTest < Test::Unit::TestCase
     def test_server_ws
       assert ::TestUtils.web_service_ok?('/server/messagebroker/amf')
     end
+    
+    def test_abiquo_dir
+      assert File.directory? '/opt/abiquo'
+    end
 
 end

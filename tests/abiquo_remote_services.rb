@@ -45,5 +45,8 @@ class AbiquoRemoteServicesTest < Test::Unit::TestCase
     def test_virtualfactory
       assert ::TestUtils.web_service_ok?('/virtualfactory/check')
     end
+  def test_abiquo_dir
+    assert File.directory? '/opt/abiquo'
+  end
 
 end

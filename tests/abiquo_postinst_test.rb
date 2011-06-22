@@ -53,9 +53,6 @@ class BaseTest < Test::Unit::TestCase
     assert File.exist? '/etc/abiquo-release'
   end
 
-  def test_abiquo_dir
-    assert File.directory? '/opt/abiquo'
-  end
 end
 
 if not File.exist? '/etc/abiquo-installer'

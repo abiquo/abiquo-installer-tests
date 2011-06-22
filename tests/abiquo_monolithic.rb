@@ -62,4 +62,8 @@ class AbiquoMonolithicTest < Test::Unit::TestCase
       assert ::TestUtils.web_service_ok?('/virtualfactory/check')
     end
 
+    def test_abiquo_dir
+      assert File.directory? '/opt/abiquo'
+    end
+
 end
