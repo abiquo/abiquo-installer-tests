@@ -1,3 +1,5 @@
+require 'abiquo_platform'
+
 class AbiquoV2VTest < Test::Unit::TestCase
   
     def test_tomcat_running
@@ -8,6 +10,10 @@ class AbiquoV2VTest < Test::Unit::TestCase
       if not ::TestUtils.installer_profiles.include?('abiquo-nfs-repository')
         assert !`mount|grep vm_repository`.strip.chomp.empty?
       end
+    end
+    
+    def test_abiquo_repository_file
+      assert File.exist? '/opt/vm_repository/.abiquo_repository'
     end
     
     def test_tomcat_enabled

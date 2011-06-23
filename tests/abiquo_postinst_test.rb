@@ -95,6 +95,10 @@ else
     puts "Testing " + "ABIQUO XEN".yellow.bold
     load 'abiquo_xen.rb'
   end
+  if TestUtils.installer_profiles.include? 'cloud-in-a-box'
+    puts "Testing " + "ABIQUO CIAB".yellow.bold
+    load 'abiquo_ciab.rb'
+  end
 
   puts "\n\n"
 
