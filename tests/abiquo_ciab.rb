@@ -6,7 +6,15 @@ require 'abiquo_monolithic'
 require 'abiquo_kvm'
 
 class AbiquoCIABTest < Test::Unit::TestCase
-  def test_dummy
+  def test_lvm_tomcat_dir
+    assert File.directory? '/opt/abiquo/lvmiscsi/tomcat/'
+  end
+
+  #
+  # overriding abiquo_platform test
+  # FW can be safely enabled in CIAB installs
+  #
+  def test_firewall_service_enabled
     assert true
   end
 end

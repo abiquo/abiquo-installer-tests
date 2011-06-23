@@ -8,10 +8,6 @@ module AbiquoPlatformTestMethods
       assert ::TestUtils.service_on?('abiquo-tomcat')
     end
 
-    def test_firewall
-      assert !::TestUtils.service_on?('iptables')
-    end
-    
     def test_abiquo_dir
       assert File.directory? '/opt/abiquo/tomcat'
     end
