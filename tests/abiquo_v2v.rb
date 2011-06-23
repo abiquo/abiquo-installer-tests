@@ -7,7 +7,8 @@ class AbiquoV2VTest < Test::Unit::TestCase
     end
 
     def test_nfs_mounted
-      if not ::TestUtils.installer_profiles.include?('abiquo-nfs-repository')
+      if (not ::TestUtils.installer_profiles.include?('abiquo-nfs-repository')) and \
+          (! ::TestUtils.installer_profiles.include?('cloud-in-a-box'))
         assert !`mount|grep vm_repository`.strip.chomp.empty?
       end
     end
@@ -18,10 +19,6 @@ class AbiquoV2VTest < Test::Unit::TestCase
     
     def test_tomcat_enabled
       assert ::TestUtils.service_on?('abiquo-tomcat')
-    end
-
-    def test_firewall
-      assert !::TestUtils.service_on?('iptables')
     end
 
     def test_v2v_context_present

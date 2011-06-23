@@ -12,16 +12,14 @@ class AbiquoKVMTest < Test::Unit::TestCase
       assert ::TestUtils.service_on?('libvirtd')
     end
 
-    def test_firewall_service_enabled
-      assert !::TestUtils.service_on?('iptables')
-    end
-    
     def test_abiquo_aim_properties_file
       assert File.exist? '/etc/abiquo-aim.ini'
     end
     
     def test_nfs_mounted
-      assert !`mount|grep vm_repository`.strip.chomp.empty?
+      if !::TestUtils.installer_profiles.include?('cloud-in-a-box')
+        assert !`mount|grep vm_repository`.strip.chomp.empty?
+      end
     end
     
 end

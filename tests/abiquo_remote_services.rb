@@ -11,7 +11,8 @@ class AbiquoRemoteServicesTest < Test::Unit::TestCase
     end
     
     def test_nfs_mounted
-      if not ::TestUtils.installer_profiles.include?('abiquo-nfs-repository')
+      if not ::TestUtils.installer_profiles.include?('abiquo-nfs-repository') and \
+        !::TestUtils.installer_profiles.include?('cloud-in-a-box')
         assert !`mount|grep vm_repository`.strip.chomp.empty?
       end
     end
