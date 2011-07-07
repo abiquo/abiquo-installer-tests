@@ -4,6 +4,7 @@ require 'abiquo_server'
 require 'abiquo_v2v'
 require 'abiquo_monolithic'
 require 'abiquo_kvm'
+require 'abiquo_lvmiscsi'
 
 class AbiquoCIABTest < Test::Unit::TestCase
   def test_lvm_tomcat_dir

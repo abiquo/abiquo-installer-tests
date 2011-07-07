@@ -1,4 +1,4 @@
-module AbiquoPlatformTestMethods
+class AbiquoPlatformTest < Test::Unit::TestCase
   
     def test_tomcat_running
       assert !`ps aux|grep java|grep '/opt/abiquo/tomcat'`.strip.chomp.empty?
@@ -16,8 +16,4 @@ module AbiquoPlatformTestMethods
       assert !::TestUtils.service_on?('iptables')
     end
 
-end
-
-class AbiquoPlatformTest < Test::Unit::TestCase
-  include AbiquoPlatformTestMethods
 end
