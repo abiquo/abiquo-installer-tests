@@ -81,6 +81,8 @@ begin
     puts output
     if output =~ /Failure/m
       puts "\n>>>>>> TEST FAILED! <<<<<<\n\n".bold.red
+    else
+      puts "\n>>>>>> TEST OK <<<<<<\n\n".bold.green
     end
   end
 rescue Exception => e
