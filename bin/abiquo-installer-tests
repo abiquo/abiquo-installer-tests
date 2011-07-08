@@ -78,10 +78,10 @@ end
 begin
   Net::SSH.start(cli.config[:host], 'root', :password => cli.config[:password], :paranoid => false) do |ssh|
     output = ssh.exec!("cd /tmp/tests/ && ruby abiquo_postinst_test.rb")
-    if output =~ /Failure/m
-      puts "\n>>>>>> TEST FAILED! <<<<<<".bold.red
-    end
     puts output
+    if output =~ /Failure/m
+      puts "\n>>>>>> TEST FAILED! <<<<<<\n\n".bold.red
+    end
   end
 rescue Exception => e
   $stderr.puts "Error running tests in remote host #{cli.config[:host]}: #{e.message}"
