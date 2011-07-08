@@ -32,6 +32,13 @@ class TestUtils
     return res.is_a? Net::HTTPOK
   end
 
+  def self.abiquo_version
+    return nil if not File.exist?('/etc/abiquo-release')
+    buf = File.read '/etc/abiquo-release'
+    buf =~ /Version:\s*(([0-9]|\.)+).*$/
+    $1
+  end
+
 end
 
 class BaseTest < Test::Unit::TestCase
@@ -63,41 +70,53 @@ if not File.exist? '/etc/abiquo-installer'
   exit 1
 else
 
+  version = TestUtils.abiquo_version
+  $: << version
+  if version.nil?
+    puts "Can't find Abiquo Version in /etc/abiquo-release"
+    exit 1
+  end
+
+  if not File.directory?(version)
+    puts "Can't find tests for Abiquo Version #{version}"
+    exit 1
+  end
+
   puts "\n\n"
   puts "Abiquo Installer Test Suite"
   puts "---------------------------"
   puts ""
   if TestUtils.installer_profiles.include? 'abiquo-monolithic'
     puts "Testing " + "ABIQUO MONOLITHIC".yellow.bold
-    load 'abiquo_monolithic.rb'
+    load version + '/abiquo_monolithic.rb'
   end
   if TestUtils.installer_profiles.include? 'abiquo-nfs-repository'
     puts "Testing " + "ABIQUO NFS REPOSITORY".yellow.bold
-    load 'abiquo_nfs_repository.rb'
+    load version + '/abiquo_nfs_repository.rb'
   end
   if TestUtils.installer_profiles.include? 'abiquo-remote-services'
     puts "Testing " + "ABIQUO REMOTE SERVICES".yellow.bold
-    load 'abiquo_remote_services.rb'
+    load version + '/abiquo_remote_services.rb'
   end
   if TestUtils.installer_profiles.include? 'abiquo-server'
     puts "Testing " + "ABIQUO SERVER".yellow.bold
-    load 'abiquo_server.rb'
+    load version + '/abiquo_server.rb'
   end
   if TestUtils.installer_profiles.include? 'abiquo-v2v'
     puts "Testing " + "ABIQUO V2V".yellow.bold
-    load 'abiquo_v2v.rb'
+    load version + '/abiquo_v2v.rb'
   end
   if TestUtils.installer_profiles.include? 'abiquo-kvm'
     puts "Testing " + "ABIQUO KVM".yellow.bold
-    load 'abiquo_kvm.rb'
+    load version + '/abiquo_kvm.rb'
   end
   if TestUtils.installer_profiles.include? 'abiquo-xen'
     puts "Testing " + "ABIQUO XEN".yellow.bold
-    load 'abiquo_xen.rb'
+    load version + '/abiquo_xen.rb'
   end
   if TestUtils.installer_profiles.include? 'cloud-in-a-box'
     puts "Testing " + "ABIQUO CIAB".yellow.bold
-    load 'abiquo_ciab.rb'
+    load version + '/abiquo_ciab.rb'
   end
 
   puts "\n\n"
