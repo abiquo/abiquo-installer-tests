@@ -1,5 +1,21 @@
 class AbiquoPlatformTest < Test::Unit::TestCase
   
+    def test_version_string
+      assert File.read('/etc/abiquo-release') =~ /1\.8\.0 Pilaf/
+    end
+
+    def test_tomcat_core_version
+      assert `rpm -q abiquo-core` =~ /abiquo-core-1\.8-5\.el5/
+    end
+
+    def test_abiquo_etk_version
+      assert `rpm -q rubygem-abiquo-etk` =~ /0\.5\.7/
+    end
+
+    def test_motd_version
+      assert(File.read('/etc/motd') =~ /(Abiquo Enterprise Edition 1\.8 Pilaf)/m)
+    end
+
     def test_tomcat_running
       assert !`ps aux|grep java|grep '/opt/abiquo/tomcat'`.strip.chomp.empty?,
               "Abiquo Tomcat is not Running"
