@@ -1,6 +1,10 @@
 # Abiquo Installer Tests #
 
-Comprehensive test suite to QA and troubleshoot an Abiquo Installation
+Comprehensive test suite to QA and troubleshoot an Abiquo Installation.
+
+The test runner tool automatically detects the Abiquo installation (distributed,mono,cloud node, etc) and runs the required tests.
+
+Only Abiquo 1.7.6 and 1.8.0 installations are supported ATM.
 
 This tool has only been tested in Linux. Other platforms may work though.
 
