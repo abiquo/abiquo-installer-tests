@@ -5,7 +5,7 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
-  gem.version = '0.2.3'
+  gem.version = '0.2.4'
   gem.name = "abiquo-installer-tests"
   gem.homepage = "http://github.com/abiquo/abiquo-installer-tests"
   gem.license = "MIT"

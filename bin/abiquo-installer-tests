@@ -60,6 +60,8 @@ TESTS_DIR = File.dirname(__FILE__) + '/../tests/'
 begin
   Net::SSH.start(cli.config[:host], 'root', :paranoid => false, :password => cli.config[:password]) do |ssh|
     ssh.exec!("rm -rf /tmp/tests")
+    ssh.exec!("yum install -y rubygems --exclude ruby-ee")
+    ssh.exec!("gem install --no-ri --no-rdoc term-ansicolor iniparse")
   end
 rescue Exception => e
   $stderr.puts "Error cleaning previous tests in host #{cli.config[:host]}: #{e.message}"
