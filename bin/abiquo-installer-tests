@@ -58,13 +58,18 @@ required_option cli, :host
 TESTS_DIR = File.dirname(__FILE__) + '/../tests/'
 
 begin
-  Net::SSH.start(cli.config[:host], 'root', :paranoid => false, :password => cli.config[:password]) do |ssh|
+  Net::SSH.start(cli.config[:host], cli.config[:user], :paranoid => false, :password => cli.config[:password]) do |ssh|
     ssh.exec!("rm -rf /tmp/tests")
     ssh.exec!("yum install -y rubygems --exclude ruby-ee")
     ssh.exec!("gem install --no-ri --no-rdoc term-ansicolor iniparse")
   end
+rescue Net::SSH::AuthenticationFailed => e
+  $stderr.puts "Error connecting to the host. Authentication failed."
+  exit 1
 rescue Exception => e
-  $stderr.puts "Error cleaning previous tests in host #{cli.config[:host]}: #{e.message}"
+  $stderr.puts "Error cleaning previous tests in host #{cli.config[:host]}: #{e.message} #{e.class}"
+  $stderr.puts $@
+  $stderr.puts $!
   exit 1
 end
 

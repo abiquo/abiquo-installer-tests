@@ -39,6 +39,14 @@ class TestUtils
     $1
   end
 
+  def self.abiquo_base_dir
+    "/opt/abiquo"
+  end
+
+  def self.webapp_deployed?(webapp)
+    File.directory? "#{abiquo_base_dir}/tomcat/webapps/#{webapp}"
+  end
+
 end
 
 class BaseTest < Test::Unit::TestCase
@@ -70,6 +78,7 @@ if not File.exist? '/etc/abiquo-installer'
   exit 1
 else
 
+  $stdout.sync = true
   version = TestUtils.abiquo_version
   $: << version
   if version.nil?

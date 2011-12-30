@@ -4,8 +4,6 @@ Comprehensive test suite to QA and troubleshoot an Abiquo Installation.
 
 The test runner tool automatically detects the Abiquo installation (distributed,mono,cloud node, etc) and runs the required tests.
 
-Only Abiquo 1.7.6 and 1.8.0 installations are supported ATM.
-
 This tool has only been tested in Linux. Other platforms may work though.
 
 # PRE-REQUISITES #
@@ -14,11 +12,15 @@ This tool has only been tested in Linux. Other platforms may work though.
 
 # INSTALLATION #
 
-sudo gem install abiquo-installer-tests
+Install required gems:
+
+sudo gem install net-ssh net-scp mixlib-cli term-ansicolor
 
 # RUNNING THE TESTS #
 
-abiquo-installer-tests --host abiquo-host-ip --user root --password secret 
+    git clone https://github.com/abiquo/abiquo-installer-tests
+    cd abiquo-installer-tests
+    ruby ./bin/abiquo-installer-tests --host abiquo-server-ip --user root --password abiquo
 
 The tests connects to the target host using SSH, uploads the tests and run them in the target host.
 
