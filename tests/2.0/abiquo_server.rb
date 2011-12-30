@@ -14,6 +14,10 @@ class AbiquoServerTest < Test::Unit::TestCase
     assert !`service mysqld status|grep running`.strip.chomp.empty?
   end
   
+  def test_redis_running
+    assert !`ps aux|grep redis-server`.strip.chomp.empty?
+  end
+  
   def test_rabbit_running
     assert !`ps aux|grep java|grep rabbitmq`.strip.chomp.empty?
   end
@@ -25,6 +29,10 @@ class AbiquoServerTest < Test::Unit::TestCase
 
   def test_server_ws
     assert ::TestUtils.web_service_ok?('/server/messagebroker/amf')
+  end
+  
+  def test_api_ws
+    assert TestUtils.web_service_auth_required?('/api/console'), "API webapp status is not OK. Check for tomcat errors."
   end
   
   def test_webapps_deployed?

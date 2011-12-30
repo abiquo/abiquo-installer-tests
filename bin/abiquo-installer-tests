@@ -48,6 +48,7 @@ def required_option(cli, opt)
 end
 
 Log = Logger.new($stdout)
+$stdout.sync = true
 
 cli = MyCLI.new
 cli.parse_options
@@ -58,11 +59,13 @@ required_option cli, :host
 TESTS_DIR = File.dirname(__FILE__) + '/../tests/'
 
 begin
+  print "Checking pre-requisites... "
   Net::SSH.start(cli.config[:host], cli.config[:user], :paranoid => false, :password => cli.config[:password]) do |ssh|
     ssh.exec!("rm -rf /tmp/tests")
-    ssh.exec!("yum install -y rubygems --exclude ruby-ee")
+    ssh.exec!("which gem || yum install -y rubygems --exclude ruby-ee")
     ssh.exec!("gem install --no-ri --no-rdoc term-ansicolor iniparse")
   end
+  puts "Done".green.bold
 rescue Net::SSH::AuthenticationFailed => e
   $stderr.puts "Error connecting to the host. Authentication failed."
   exit 1
@@ -74,9 +77,11 @@ rescue Exception => e
 end
 
 begin
+  print "Uploading tests... "
   Net::SFTP.start(cli.config[:host], 'root', :password => cli.config[:password], :paranoid => false) do |sftp|
     sftp.upload! TESTS_DIR, '/tmp/tests/'
   end
+  puts "Done".green.bold
 rescue Exception => e
   $stderr.puts "Error uploading tests to host #{cli.config[:host]}: #{e.message}"
   exit 1
@@ -84,8 +89,12 @@ end
 
 begin
   Net::SSH.start(cli.config[:host], 'root', :password => cli.config[:password], :paranoid => false) do |ssh|
-    output = ssh.exec!("cd /tmp/tests/ && ruby abiquo_postinst_test.rb")
-    puts output
+    puts "Running tests..."
+    output = ""
+    ssh.exec!("cd /tmp/tests/ && ruby abiquo_postinst_test.rb") do |ch, stream, data|
+      print data
+      output += data
+    end
     if output =~ /Failure/m
       puts "\n>>>>>> TEST FAILED! <<<<<<\n\n".bold.red
     else

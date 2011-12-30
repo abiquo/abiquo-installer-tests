@@ -14,7 +14,7 @@ This tool has only been tested in Linux. Other platforms may work though.
 
 Install required gems:
 
-sudo gem install net-ssh net-scp mixlib-cli term-ansicolor
+sudo gem install net-ssh net-scp net-sftp mixlib-cli term-ansicolor
 
 # RUNNING THE TESTS #
 

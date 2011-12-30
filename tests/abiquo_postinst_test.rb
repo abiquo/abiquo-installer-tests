@@ -27,6 +27,11 @@ class TestUtils
     `/sbin/chkconfig --list #{service}` =~ /3:on/
   end
 
+  def self.web_service_auth_required?(path, host = 'localhost')
+    res = Net::HTTP.get_response URI.parse("http://#{host}/#{path}")
+    return res.is_a? Net::HTTPUnauthorized
+  end
+
   def self.web_service_ok?(path, host = 'localhost')
     res = Net::HTTP.get_response URI.parse("http://#{host}/#{path}")
     return res.is_a? Net::HTTPOK
