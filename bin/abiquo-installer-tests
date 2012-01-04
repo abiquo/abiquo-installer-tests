@@ -27,6 +27,11 @@ class MyCLI
     :long => "--host HOST",
     :description => "Abiquo host IP to test"
   
+  option :local,
+    :long => "--local",
+    :description => "Run the tests locally",
+    :boolean => true
+  
   option :help,
     :short => "-h",
     :long => "--help",
@@ -53,55 +58,71 @@ $stdout.sync = true
 cli = MyCLI.new
 cli.parse_options
 
-required_option cli, :password
-required_option cli, :host
-
 TESTS_DIR = File.dirname(__FILE__) + '/../tests/'
 
-begin
-  print "Checking pre-requisites... "
-  Net::SSH.start(cli.config[:host], cli.config[:user], :paranoid => false, :password => cli.config[:password]) do |ssh|
-    ssh.exec!("rm -rf /tmp/tests")
-    ssh.exec!("which gem || yum install -y rubygems --exclude ruby-ee")
-    ssh.exec!("gem install --no-ri --no-rdoc term-ansicolor iniparse")
+if cli.config[:local]
+  #Run the tests local
+  puts "Running the test locally..."
+  Dir.chdir TESTS_DIR
+  output = ""
+  `ruby abiquo_postinst_test.rb`.each_line do |l|
+    output += l
+    puts l
   end
-  puts "Done".green.bold
-rescue Net::SSH::AuthenticationFailed => e
-  $stderr.puts "Error connecting to the host. Authentication failed."
-  exit 1
-rescue Exception => e
-  $stderr.puts "Error cleaning previous tests in host #{cli.config[:host]}: #{e.message} #{e.class}"
-  $stderr.puts $@
-  $stderr.puts $!
-  exit 1
-end
+  if output =~ /Failure/m
+    puts "\n>>>>>> TEST FAILED! <<<<<<\n\n".bold.red
+  else
+    puts "\n>>>>>> TEST OK <<<<<<\n\n".bold.green
+  end
+else
+  required_option cli, :password
+  required_option cli, :host
 
-begin
-  print "Uploading tests... "
-  Net::SFTP.start(cli.config[:host], 'root', :password => cli.config[:password], :paranoid => false) do |sftp|
-    sftp.upload! TESTS_DIR, '/tmp/tests/'
+  begin
+    print "Checking pre-requisites... "
+    Net::SSH.start(cli.config[:host], cli.config[:user], :paranoid => false, :password => cli.config[:password]) do |ssh|
+      ssh.exec!("rm -rf /tmp/tests")
+      ssh.exec!("which gem || yum install -y rubygems --exclude ruby-ee")
+      ssh.exec!("gem install --no-ri --no-rdoc term-ansicolor iniparse")
+    end
+    puts "Done".green.bold
+  rescue Net::SSH::AuthenticationFailed => e
+    $stderr.puts "Error connecting to the host. Authentication failed."
+    exit 1
+  rescue Exception => e
+    $stderr.puts "Error cleaning previous tests in host #{cli.config[:host]}: #{e.message} #{e.class}"
+    $stderr.puts $@
+    $stderr.puts $!
+    exit 1
   end
-  puts "Done".green.bold
-rescue Exception => e
-  $stderr.puts "Error uploading tests to host #{cli.config[:host]}: #{e.message}"
-  exit 1
-end
 
-begin
-  Net::SSH.start(cli.config[:host], 'root', :password => cli.config[:password], :paranoid => false) do |ssh|
-    puts "Running tests..."
-    output = ""
-    ssh.exec!("cd /tmp/tests/ && ruby abiquo_postinst_test.rb") do |ch, stream, data|
-      print data
-      output += data
+  begin
+    print "Uploading tests... "
+    Net::SFTP.start(cli.config[:host], 'root', :password => cli.config[:password], :paranoid => false) do |sftp|
+      sftp.upload! TESTS_DIR, '/tmp/tests/'
     end
-    if output =~ /Failure/m
-      puts "\n>>>>>> TEST FAILED! <<<<<<\n\n".bold.red
-    else
-      puts "\n>>>>>> TEST OK <<<<<<\n\n".bold.green
-    end
+    puts "Done".green.bold
+  rescue Exception => e
+    $stderr.puts "Error uploading tests to host #{cli.config[:host]}: #{e.message}"
+    exit 1
   end
-rescue Exception => e
-  $stderr.puts "Error running tests in remote host #{cli.config[:host]}: #{e.message}"
-  exit 1
+
+  begin
+    Net::SSH.start(cli.config[:host], 'root', :password => cli.config[:password], :paranoid => false) do |ssh|
+      puts "Running tests..."
+      output = ""
+      ssh.exec!("cd /tmp/tests/ && ruby abiquo_postinst_test.rb") do |ch, stream, data|
+        print data
+        output += data
+      end
+      if output =~ /Failure/m
+        puts "\n>>>>>> TEST FAILED! <<<<<<\n\n".bold.red
+      else
+        puts "\n>>>>>> TEST OK <<<<<<\n\n".bold.green
+      end
+    end
+  rescue Exception => e
+    $stderr.puts "Error running tests in remote host #{cli.config[:host]}: #{e.message}"
+    exit 1
+  end
 end
