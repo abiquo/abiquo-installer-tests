@@ -19,4 +19,12 @@ class AbiquoCIABTest < Test::Unit::TestCase
     assert true
   end
 
+  def test_fullvirt_disabled
+    prop = TestUtils.find_abiquo_property 'abiquo.virtualfactory.kvm.fullVirt'
+    assert !prop.nil?, "Property abiquo.virtualfactory.kvm.fullVirt not found"
+    pval = prop.split("=")[1].strip.chomp
+    assert (pval == 'false'),
+           "Invalid abiquo.virtualfactory.kvm.fullVirt property value. Value should be false."
+  end
+
 end
