@@ -82,8 +82,8 @@ else
     print "Checking pre-requisites... "
     Net::SSH.start(cli.config[:host], cli.config[:user], :paranoid => false, :password => cli.config[:password]) do |ssh|
       ssh.exec!("rm -rf /tmp/tests")
-      ssh.exec!("which gem || yum install -y rubygems --exclude ruby-ee")
-      ssh.exec!("gem install --no-ri --no-rdoc term-ansicolor iniparse")
+      #ssh.exec!("which gem || yum install -y rubygems --exclude ruby-ee")
+      #ssh.exec!("gem install --no-ri --no-rdoc term-ansicolor iniparse")
     end
     puts "Done".green.bold
   rescue Net::SSH::AuthenticationFailed => e

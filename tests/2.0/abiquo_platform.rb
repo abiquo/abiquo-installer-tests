@@ -29,7 +29,7 @@ class AbiquoPlatformTest < Test::Unit::TestCase
     
     def test_firewall_service_enabled
       assert !::TestUtils.service_on?('iptables'),
-        "iptables service is enabled. This might be ok but double check if you are having network issues"
+        "WARNING: iptables service is enabled. This might be ok but double check the firewall rules if you are having problems connecting to the hypervisor."
     end
 
 end

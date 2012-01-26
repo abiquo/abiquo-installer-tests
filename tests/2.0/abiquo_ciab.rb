@@ -18,4 +18,5 @@ class AbiquoCIABTest < Test::Unit::TestCase
   def test_firewall_service_enabled
     assert true
   end
+
 end

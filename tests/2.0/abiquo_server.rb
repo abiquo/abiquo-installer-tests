@@ -2,6 +2,12 @@ require 'abiquo_platform'
 
 class AbiquoServerTest < Test::Unit::TestCase
   
+  def test_required_packages
+    %w{abiquo-server abiquo-api abiquo-client-premium abiquo-core ntp nfs-utils jdk redis}.each do |p|
+      assert !`rpm -q #{p}`.strip.chomp.empty?, "#{p} package not installed."
+    end
+  end
+
   def test_abiquo_properties_present
     assert File.exist? '/opt/abiquo/config/abiquo.properties'
   end

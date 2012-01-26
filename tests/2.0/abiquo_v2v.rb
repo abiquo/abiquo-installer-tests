@@ -1,6 +1,20 @@
 require 'abiquo_platform'
 
 class AbiquoV2VTest < Test::Unit::TestCase
+    
+    def test_required_packages
+      %w{abiquo-v2v abiquo-core ntp nfs-utils jdk}.each do |p| 
+        assert !`rpm -q #{p}`.strip.chomp.empty?, "#{p} package not installed."
+      end
+    end
+
+    def test_mechadora_available
+      assert File.exist?('/usr/bin/mechadora'), "Mechadora script not found in /usr/bin/mechadora"
+    end
+    
+    def test_v2v_diskmanager_available
+      assert File.exist?('/usr/bin/v2v-diskmanager'), "V2V Disk Manager script not found in /usr/bin/v2v-diskmanager"
+    end
   
     def test_tomcat_running
       assert !`ps aux|grep java|grep '/opt/abiquo/tomcat'`.strip.chomp.empty?

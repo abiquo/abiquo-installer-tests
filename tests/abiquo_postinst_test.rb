@@ -10,8 +10,12 @@ class String
   include Term::ANSIColor
 end
 
-class TestUtils
+class TestUtils 
 
+  # 
+  # Should return an array of installer profiles
+  # otherwise the installation is broken
+  #
   def self.installer_profiles
     begin
       buf = File.read '/etc/abiquo-installer' 
@@ -20,6 +24,10 @@ class TestUtils
     rescue Exception
       return nil
     end
+  end
+
+  def self.find_abiquo_property(prop_name, prop_file = "/opt/abiquo/config/abiquo.properties")
+    File.read(prop_file).lines.find { |l| l.strip.chomp =~ /^#{prop_name}/ }
   end
 
   def self.service_on?(service)
@@ -97,6 +105,8 @@ else
   end
 
   puts "\n\n"
+  puts "Abiquo Version #{version.bold} detected"
+  puts 
   puts "Abiquo Installer Test Suite"
   puts "---------------------------"
   puts ""
