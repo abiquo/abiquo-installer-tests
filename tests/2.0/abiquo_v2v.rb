@@ -52,5 +52,33 @@ class AbiquoV2VTest < Test::Unit::TestCase
     def test_abiquo_dir
       assert File.directory? '/opt/abiquo'
     end
+    
+    def test_abiquo_properties_present
+      assert File.exist?('/opt/abiquo/config/abiquo.properties'),
+        'abiquo.properties file not found'
+    end
+    
+    def test_properties
+      require 'iniparse'
+      config = IniParse.parse(File.read('/opt/abiquo/config/abiquo.properties'))
+      assert !config['remote-services'].nil?,
+        "[remote-services] section in /opt/abiquo/config/abiquo.properties is missing"
+
+      assert !config['remote-services']['abiquo.rabbitmq.username'].nil?,
+        "abiquo.rabbitmq.username property is missing in abiquo.properties"
+
+      assert !config['remote-services']['abiquo.rabbitmq.password'].nil?,
+        "abiquo.rabbitmq.password property is missing in abiquo.properties"
+
+      assert !config['remote-services']['abiquo.rabbitmq.host'].nil?,
+        "abiquo.rabbitmq.host property is missing in abiquo.properties"
+
+      assert !config['remote-services']['abiquo.rabbitmq.port'].nil?,
+        "abiquo.rabbitmq.port property is missing in abiquo.properties"
+      
+      assert !config['remote-services']['abiquo.datacenter.id'].nil?,
+        "abiquo.datacenter.id property is missing in abiquo.properties"
+
+    end
 
 end

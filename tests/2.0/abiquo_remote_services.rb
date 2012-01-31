@@ -66,9 +66,6 @@ class AbiquoRemoteServicesTest < Test::Unit::TestCase
       assert !config['remote-services'].nil?,
         "[remote-services] section in /opt/abiquo/config/abiquo.properties is missing"
 
-      #assert !config['remote-services']['abiquo.virtualfactory.hyperv.repositoryLocation'].nil?,
-        "abiquo.virtualfactory.hyperv.repositoryLocation property is missing in abiquo.properties"
-
       assert !config['remote-services']['abiquo.rabbitmq.username'].nil?,
         "abiquo.rabbitmq.username property is missing in abiquo.properties"
 
@@ -87,41 +84,15 @@ class AbiquoRemoteServicesTest < Test::Unit::TestCase
       assert !config['remote-services']['abiquo.appliancemanager.repositoryLocation'].nil?,
         "abiquo.appliancemanager.repositoryLocation property is missing in abiquo.properties"
 
-      #assert !config['remote-services']['abiquo.virtualfactory.xenserver.repositoryLocation'].nil?,
-        "abiquo.virtualfactory.xenserver.repositoryLocation property is missing in abiquo.properties"
-
-      #assert !config['remote-services']['abiquo.virtualfactory.vmware.repositoryLocation'].nil?,
-        "abiquo.virtualfactory.vmware.repositoryLocation property is missing in abiquo.properties"
-
-      #assert !config['remote-services']['abiquo.virtualfactory.storagelink.user'].nil?,
-        #"abiquo.virtualfactory.storagelink.user property is missing in abiquo.properties"
-
-      #assert !config['remote-services']['abiquo.virtualfactory.storagelink.password'].nil?,
-        #"abiquo.virtualfactory.storagelink.password property is missing in abiquo.properties"
-
-      #assert !config['remote-services']['abiquo.virtualfactory.storagelink.address'].nil?,
-        #"abiquo.virtualfactory.storagelink.address property is missing in abiquo.properties"
-
       assert !config['remote-services']['abiquo.redis.port'].nil?,
         "abiquo.redis.port is missing in abiquo.properties"
 
       assert !config['remote-services']['abiquo.redis.host'].nil?,
         "abiquo.redis.host is missing in abiquo.properties"
 
-      #assert !config['remote-services']['abiquo.storagemanager.netapp.user'].nil?,
-        #"abiquo.storagemanager.netapp.user is missing in abiquo.properties"
+      assert !config['remote-services']['abiquo.datacenter.id'].nil?,
+        "abiquo.datacenter.id property is missing in abiquo.properties"
 
-      #assert !config['remote-services']['abiquo.storagemanager.netapp.password'].nil?,
-        #"abiquo.storagemanager.netapp.password is missing in abiquo.properties"
-
-      #assert !config['remote-services']['abiquo.dvs.enabled'].nil?,
-        #"abiquo.dvs.enabled is missing in abiquo.properties"
-
-      #assert !config['remote-services']['abiquo.dvs.vcenter.user'].nil?,
-        #"abiquo.dvs.vcenter.user is missing in abiquo.properties"
-
-      #assert !config['remote-services']['abiquo.dvs.vcenter.password'].nil?,
-        #"abiquo.dvs.vcenter.password is missing in abiquo.properties"
     end
 
 end
