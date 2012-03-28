@@ -14,7 +14,7 @@ class MyCLI
 
   option :user,
     :short => '-u USER',
-    :long => "--user USEr",
+    :long => "--user USER",
     :description => "SSH user to login with (Default root)",
     :default => 'root'
 

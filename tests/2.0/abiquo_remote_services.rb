@@ -3,7 +3,7 @@ require 'abiquo_platform'
 class AbiquoRemoteServicesTest < Test::Unit::TestCase
   
     def test_required_packages
-      %w{abiquo-remote-services abiquo-vsm abiquo-ssm abiquo-tarantino abiquo-nodecollector abiquo-core ntp nfs-utils jdk}.each do |p|
+      %w{abiquo-remote-services abiquo-vsm abiquo-ssm abiquo-virtualfactory abiquo-nodecollector abiquo-core ntp nfs-utils jdk}.each do |p|
         assert !`rpm -q #{p}`.strip.chomp.empty?, "#{p} package not installed."
       end
     end
@@ -27,7 +27,7 @@ class AbiquoRemoteServicesTest < Test::Unit::TestCase
     end
 
     def test_webapps_deployed?
-      %w{tarantino vsm ssm am nodecollector}.each do |w|
+      %w{virtualfactory vsm ssm am nodecollector}.each do |w|
         assert TestUtils.webapp_deployed?(w), "#{w} Tomcat webapp not found in #{TestUtils.abiquo_base_dir}/tomcat/webapps"
       end
     end
@@ -52,8 +52,8 @@ class AbiquoRemoteServicesTest < Test::Unit::TestCase
       assert ::TestUtils.web_service_ok?('/ssm/check'), "SSM webapp status is not OK. Check for tomcat errors."
     end
 
-    def test_tarantino
-      assert ::TestUtils.web_service_ok?('/tarantino/check'), "Tarantino webapp status is not OK. Check for tomcat errors."
+    def test_virtualfactory
+      assert ::TestUtils.web_service_ok?('/virtualfactory/check'), "Virtualfactory webapp status is not OK. Check for tomcat errors."
     end
     
     def test_abiquo_repository_file

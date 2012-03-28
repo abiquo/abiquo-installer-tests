@@ -9,7 +9,7 @@ class AbiquoPlatformTest < Test::Unit::TestCase
     end
 
     def test_abiquo_etk_version
-      assert `rpm -q rubygem-abiquo-etk` =~ /0\.5\.7/
+      assert `rpm -q rubygem-abiquo-etk` =~ /0\.5\.8/
     end
 
     def test_tomcat_running

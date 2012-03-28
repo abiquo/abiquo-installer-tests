@@ -86,7 +86,7 @@ class AbiquoServerTest < Test::Unit::TestCase
     assert !config['server']['abiquo.server.api.location'].nil?,
       "abiquo.server.api.location is missing in abiquo.properties"
 
-    if not TestUtils.webapp_deployed?('tarantino')
+    if not TestUtils.webapp_deployed?('virtualfactory')
       assert !config['server']['abiquo.redis.host'].nil?,
         "abiquo.redis.host is missing in abiquo.properties"
       assert !config['server']['abiquo.redis.port'].nil?,
