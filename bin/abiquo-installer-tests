@@ -1,4 +1,8 @@
 #!/usr/bin/env ruby
+Dir[File.dirname(__FILE__) + '/../vendor/*'].each do |dir|
+      $: << dir + '/lib'
+end
+
 require 'rubygems'
 require 'net/ssh'
 require 'net/sftp'

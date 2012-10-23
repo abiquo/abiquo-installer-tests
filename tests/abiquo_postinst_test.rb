@@ -49,6 +49,7 @@ class TestUtils
     return nil if not File.exist?('/etc/abiquo-release')
     buf = File.read '/etc/abiquo-release'
     buf =~ /Version:\s*(([0-9]|\.)+).*$/
+    puts buf
     $1
   end
 
