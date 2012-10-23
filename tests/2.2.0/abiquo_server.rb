@@ -13,7 +13,7 @@ class AbiquoServerTest < Test::Unit::TestCase
   end
 
   def test_mysql_schema_present
-    assert(`mysql -e 'show databases' 2>&1` =~ /kinton/m),"kinton schema does not exist."
+    assert `mysql -e 'show databases' 2>&1` =~ /kinton/m,"kinton schema does not exist."
   end
 
   def test_mysql_running
